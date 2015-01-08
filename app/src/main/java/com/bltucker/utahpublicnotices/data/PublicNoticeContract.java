@@ -14,8 +14,11 @@ public final class PublicNoticeContract {
     public static final String PATH_TO_CITY = "city";
     public static final String PATH_TO_NOTICE = "notice";
 
+    public static final String DATE_FORMAT = "yyyyMMdd";
+
 
     public static final class CityEntry implements BaseColumns{
+
         public static final String TABLE_NAME = "city";
 
         public static final String COLUMN_NAME = "name";
