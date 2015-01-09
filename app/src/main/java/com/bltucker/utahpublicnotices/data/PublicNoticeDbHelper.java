@@ -6,9 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public final class PublicNoticeDbHelper extends SQLiteOpenHelper{
 
+    public static final String DATABASE_NAME = "publicnotice.db";
+
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_NAME = "publicnotice.db";
 
     public PublicNoticeDbHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

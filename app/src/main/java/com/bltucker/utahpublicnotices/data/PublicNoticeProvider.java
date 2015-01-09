@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-public final class NoticeProvider extends ContentProvider{
+public final class PublicNoticeProvider extends ContentProvider{
 
     private static final UriMatcher uriMatcher = buildUriMatcher();
 
