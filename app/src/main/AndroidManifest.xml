@@ -16,6 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <provider
+            android:authorities="com.bltucker.utahpublicnotices"
+            android:name=".data.PublicNoticeProvider"
+            android:exported="false"
+            android:syncable="true" />
     </application>
 
 </manifest>

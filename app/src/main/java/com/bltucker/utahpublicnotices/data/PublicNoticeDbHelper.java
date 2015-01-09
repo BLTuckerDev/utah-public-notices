@@ -33,7 +33,7 @@ public final class PublicNoticeDbHelper extends SQLiteOpenHelper{
                 + PublicNoticeContract.NoticeEntry.COLUMN_TITLE + " TEXT NOT NULL,"
                 + PublicNoticeContract.NoticeEntry.COLUMN_FULL_NOTICE + " TEXT NOT NULL,"
                 + " FOREIGN KEY ( " + PublicNoticeContract.NoticeEntry.COLUMN_CITY_KEY + ") REFERENCES "
-                + PublicNoticeContract.CityEntry.TABLE_NAME + " (" + PublicNoticeContract.CityEntry._ID + ");";
+                + PublicNoticeContract.CityEntry.TABLE_NAME + " (" + PublicNoticeContract.CityEntry._ID + "));";
 
 
         sqLiteDatabase.execSQL(SQL_CREATE_CITY_TABLE);

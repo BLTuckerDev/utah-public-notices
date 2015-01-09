@@ -73,6 +73,7 @@ public final class PublicNoticeProvider extends ContentProvider{
         Cursor retCursor;
 
         switch(uriMatcher.match(uri)){
+//TODO: we need to be able to get notices, cities, and uri's with ids.
             case NOTICE_WITH_CITY_AND_DATE_URI_CODE:
                 retCursor = getNoticesByCityAndDate(uri, projection, sortOrder);
                 break;
