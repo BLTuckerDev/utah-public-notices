@@ -177,15 +177,107 @@ public final class NoticeProvider extends ContentProvider{
 
 
     @Override
-    public int delete(Uri uri, String s, String[] strings) {
-        return 0;
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final int match = uriMatcher.match(uri);
+        int rowsDeleted;
+
+        switch(match){
+            case NOTICE_URI_CODE:
+                rowsDeleted = db.delete(PublicNoticeContract.NoticeEntry.TABLE_NAME,
+                        selection,
+                        selectionArgs);
+                break;
+
+            case CITY_URI_CODE:
+                rowsDeleted = db.delete(PublicNoticeContract.CityEntry.TABLE_NAME,
+                        selection,
+                        selectionArgs);
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: "+ uri);
+        }
+
+        if(null == selection || rowsDeleted != 0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsDeleted;
     }
 
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
-        return 0;
+    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final int match = uriMatcher.match(uri);
+        int rowsUpdated = 0;
+
+        switch (match){
+            case NOTICE_URI_CODE:
+                rowsUpdated = db.update(PublicNoticeContract.NoticeEntry.TABLE_NAME,
+                        contentValues,
+                        selection,
+                        selectionArgs);
+                break;
+
+
+            case CITY_URI_CODE:
+
+                rowsUpdated = db.update(PublicNoticeContract.CityEntry.TABLE_NAME,
+                        contentValues,
+                        selection,
+                        selectionArgs);
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+
+        if(rowsUpdated != 0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsUpdated;
     }
+
+
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        final int match = uriMatcher.match(uri);
+
+        switch(match){
+            case NOTICE_URI_CODE:
+                return this.bulkInsertNotices(values);
+
+            default:
+                return super.bulkInsert(uri, values);
+        }
+    }
+
+
+    private int bulkInsertNotices(ContentValues[] notices){
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.beginTransaction();
+        int returnCount = 0;
+
+        try{
+            for(ContentValues noticeValues : notices){
+                long _id = db.insert(PublicNoticeContract.NoticeEntry.TABLE_NAME, null, noticeValues);
+                if(_id != -1){
+                    returnCount++;
+                }
+            }
+        } finally {
+            db.endTransaction();
+        }
+
+        return returnCount;
+    }
+
 
     private Cursor getNoticesByCity(Uri uri, String[] projections, String sortOrder){
         String citySetting = PublicNoticeContract.NoticeEntry.getCityFromUri(uri);
