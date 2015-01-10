@@ -17,7 +17,7 @@ public final class PublicNoticeContract {
     public static final String DATE_FORMAT = "yyyyMMdd";
 
 
-    public static final class CityEntry implements BaseColumns{
+    public static final class CityEntry implements BaseColumns {
 
         public static final String TABLE_NAME = "city";
 
@@ -25,18 +25,19 @@ public final class PublicNoticeContract {
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_TO_CITY).build();
 
-        public static final String CONTENT_TYPE =  "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_TO_CITY;
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_TO_CITY;
 
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_TO_CITY;
 
-        public static Uri buildCityUri(long id){
+
+        public static Uri buildCityUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
     }
 
 
-    public static final class NoticeEntry implements BaseColumns{
+    public static final class NoticeEntry implements BaseColumns {
 
         public static final String TABLE_NAME = "notice";
 
@@ -61,33 +62,32 @@ public final class PublicNoticeContract {
                 "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_TO_NOTICE;
 
 
-
-        public static Uri buildNoticeUri(long id){
+        public static Uri buildNoticeUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
 
-        public static Uri buildNoticeCity(String city){
+        public static Uri buildNoticeCity(String city) {
             return CONTENT_URI.buildUpon().appendPath(city).build();
         }
 
 
-        public static Uri buildNoticeCityWithStartDate(String city, String startDate){
+        public static Uri buildNoticeCityWithStartDate(String city, String startDate) {
             return buildNoticeCity(city).buildUpon().appendQueryParameter(COLUMN_DATE, startDate).build();
         }
 
 
-        public static String getCityFromUri(Uri uri){
+        public static String getCityFromUri(Uri uri) {
             return uri.getPathSegments().get(1);
         }
 
 
-        public static String getDateFromUri(Uri uri){
+        public static String getDateFromUri(Uri uri) {
             return uri.getPathSegments().get(2);
         }
 
 
-        public static String getStartDateFromUri(Uri uri){
+        public static String getStartDateFromUri(Uri uri) {
             return uri.getQueryParameter(COLUMN_DATE);
         }
     }
