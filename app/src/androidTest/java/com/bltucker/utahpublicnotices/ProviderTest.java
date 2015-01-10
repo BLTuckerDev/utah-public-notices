@@ -16,9 +16,6 @@ public class ProviderTest extends AndroidTestCase {
     }
 
 
-
-
-
     public void testInsertAndRead(){
 
         CursorValidator cursorValidator = new CursorValidator();
@@ -44,6 +41,18 @@ public class ProviderTest extends AndroidTestCase {
         Cursor noticeCursor = mContext.getContentResolver().query(PublicNoticeContract.NoticeEntry.CONTENT_URI, null, null,null, null);
         noticeCursor.moveToFirst();
         cursorValidator.validateCursor(noticeCursor, fakeNotice);
+
+
+        noticeCursor = mContext.getContentResolver().query(PublicNoticeContract.NoticeEntry.buildNoticeUri(noticeId), null, null, null, null);
+
+        assertTrue(noticeCursor.getCount() == 1);
+
+        //get joined data for city and date
+        //probably wont need this
+
+        //get joined data for specific date.
+        //probably wont need this
+
 
 
 

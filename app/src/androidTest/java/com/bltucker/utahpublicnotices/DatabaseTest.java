@@ -71,7 +71,24 @@ public class DatabaseTest extends AndroidTestCase {
         noticeCursor.moveToFirst();
         assertTrue(cursorValidator.validateCursor(noticeCursor, noticeValues));
 
+
+
+        noticeCursor = mContext.getContentResolver().query(PublicNoticeContract.NoticeEntry.buildNoticeCity("Huntington"),
+                null,
+                null,
+                null,
+                null);
+
+        noticeCursor.moveToFirst();
+        assertTrue(cursorValidator.validateCursor(noticeCursor, noticeValues));
+
+
+
         dbHelper.close();
+
+
+
+
     }
 }
 

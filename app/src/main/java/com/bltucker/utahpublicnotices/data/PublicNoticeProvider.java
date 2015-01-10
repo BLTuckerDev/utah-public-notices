@@ -28,7 +28,8 @@ public final class PublicNoticeProvider extends ContentProvider{
     static {
         noticeByCityQueryBuilder = new SQLiteQueryBuilder();
         noticeByCityQueryBuilder.setTables(PublicNoticeContract.NoticeEntry.TABLE_NAME
-            + " INNER JOIN ON " + PublicNoticeContract.CityEntry.TABLE_NAME
+            + " INNER JOIN " + PublicNoticeContract.CityEntry.TABLE_NAME
+            + " ON " + PublicNoticeContract.NoticeEntry.TABLE_NAME
             + "." + PublicNoticeContract.NoticeEntry.COLUMN_CITY_KEY
             + " = " + PublicNoticeContract.CityEntry.TABLE_NAME
             + "." + PublicNoticeContract.CityEntry._ID);
