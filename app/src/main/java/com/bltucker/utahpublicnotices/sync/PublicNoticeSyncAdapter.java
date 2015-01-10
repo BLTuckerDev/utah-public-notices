@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
@@ -13,38 +14,44 @@ import android.os.Bundle;
 
 import com.bltucker.utahpublicnotices.R;
 import com.bltucker.utahpublicnotices.data.PublicNoticeContract;
-import com.bltucker.utahpublicnotices.data.PublicNoticeProvider;
+import com.bltucker.utahpublicnotices.utils.PreferenceFetcher;
 
-public final class PublicNoticeSyncAdapter extends AbstractThreadedSyncAdapter{
+import java.util.List;
+
+public final class PublicNoticeSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static final int SYNC_INTERVAL_SECONDS = 4 * 60 * 60;
     public static final int SYNC_FLEX_TIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
 
-    public PublicNoticeSyncAdapter(Context context, boolean autoInitialize){
-        super(context,autoInitialize);
+
+    public PublicNoticeSyncAdapter(Context context, boolean autoInitialize) {
+        super(context, autoInitialize);
     }
 
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient contentProviderClient, SyncResult syncResult) {
 
-        //get the user's city preference
+        PreferenceFetcher prefFetcher = new PreferenceFetcher();
+        String city = prefFetcher.getCityPreference(getContext());
 
-        //create an object that will make the request and get the data
-        // create an object that will map it to a list of ContentValues
+        UtahOpenGovApiProvider apiProvider = new UtahOpenGovApiProvider(city);
+        List<ContentValues> notices = apiProvider.getPublicNotices();
 
-        //add the content values that are returned into our content resolver.
+        //TODO: delete meeting notices that are in the past!
 
+        ContentValues[] values = notices.toArray(new ContentValues[notices.size()]);
+        getContext().getContentResolver().bulkInsert(PublicNoticeContract.NoticeEntry.CONTENT_URI, values);
     }
 
 
-    public static Account getSyncAccount(Context context){
+    public static Account getSyncAccount(Context context) {
         AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         Account newAccount = new Account(context.getString(R.string.app_name), context.getString(R.string.sync_account_type));
 
-        if(null == accountManager.getPassword(newAccount)){
+        if (null == accountManager.getPassword(newAccount)) {
 
-            if(!accountManager.addAccountExplicitly(newAccount, "", null)){
+            if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
                 return null;
             }
 
@@ -54,17 +61,18 @@ public final class PublicNoticeSyncAdapter extends AbstractThreadedSyncAdapter{
         return newAccount;
     }
 
-    private static void onAccountCreated(Account newAccount, Context context){
+
+    private static void onAccountCreated(Account newAccount, Context context) {
         configurePeriodicSync(context);
         ContentResolver.setSyncAutomatically(newAccount, PublicNoticeContract.CONTENT_AUTHORITY, true);
         syncImmediately(context);
     }
 
 
-    public static void configurePeriodicSync(Context context){
+    public static void configurePeriodicSync(Context context) {
         Account account = getSyncAccount(context);
         String authority = PublicNoticeContract.CONTENT_AUTHORITY;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             SyncRequest request = new SyncRequest.Builder()
                     .setExtras(new Bundle())
                     .syncPeriodic(SYNC_INTERVAL_SECONDS, SYNC_FLEX_TIME_SECONDS)
@@ -77,11 +85,12 @@ public final class PublicNoticeSyncAdapter extends AbstractThreadedSyncAdapter{
     }
 
 
-    public static void initializeSyncAdapter(Context context){
+    public static void initializeSyncAdapter(Context context) {
         getSyncAccount(context);
     }
 
-    public static void syncImmediately(Context context){
+
+    public static void syncImmediately(Context context) {
         Bundle syncRequest = new Bundle();
         syncRequest.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         syncRequest.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);

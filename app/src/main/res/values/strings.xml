@@ -7,5 +7,9 @@
     <string name="sync_account_type">utahpublicnotice.bltucker.com</string>
     <string name="content_authority">com.bltucker.utahpublicnotices</string>
     <string name="title_activity_details">DetailsActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="city_setting_pref_key">city_setting</string>
+    <string name="city_setting_pref_title">Your City</string>
+    <string name="city_setting_pref_default">Salt Lake City</string>
 
 </resources>
