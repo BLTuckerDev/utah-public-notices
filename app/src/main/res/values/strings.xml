@@ -4,5 +4,7 @@
     <string name="app_name">Utah Public Notices</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="sync_account_type">utahpublicnotice.bltucker.com</string>
+    <string name="content_authority">com.bltucker.utahpublicnotices</string>
 
 </resources>
