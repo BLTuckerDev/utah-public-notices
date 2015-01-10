@@ -18,6 +18,7 @@ public final class PublicNoticeProvider extends ContentProvider{
     private static final int CITY_WITH_ID_URI_CODE = 101;
 
     private static final int NOTICE_URI_CODE = 200;
+    private static final int NOTICE_URI_WITH_ID_CODE = 201;
 
     private static final int NOTICE_WITH_CITY_URI_CODE = 202;
     private static final int NOTICE_WITH_CITY_AND_DATE_URI_CODE = 203;
@@ -52,6 +53,7 @@ public final class PublicNoticeProvider extends ContentProvider{
         matcher.addURI(authority, PublicNoticeContract.PATH_TO_CITY + "/#", CITY_WITH_ID_URI_CODE);
 
         matcher.addURI(authority, PublicNoticeContract.PATH_TO_NOTICE, NOTICE_URI_CODE);
+        matcher.addURI(authority, PublicNoticeContract.PATH_TO_NOTICE + "/#", NOTICE_URI_WITH_ID_CODE);
         matcher.addURI(authority, PublicNoticeContract.PATH_TO_NOTICE + "/*", NOTICE_WITH_CITY_URI_CODE);
         matcher.addURI(authority, PublicNoticeContract.PATH_TO_NOTICE + "/*/*", NOTICE_WITH_CITY_AND_DATE_URI_CODE);
 
@@ -73,7 +75,19 @@ public final class PublicNoticeProvider extends ContentProvider{
         Cursor retCursor;
 
         switch(uriMatcher.match(uri)){
-//TODO: we need to be able to get notices, cities, and uri's with ids.
+
+            case NOTICE_URI_CODE:
+            case NOTICE_URI_WITH_ID_CODE:
+                retCursor = dbHelper.getReadableDatabase().query(
+                        PublicNoticeContract.NoticeEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+
             case NOTICE_WITH_CITY_AND_DATE_URI_CODE:
                 retCursor = getNoticesByCityAndDate(uri, projection, sortOrder);
                 break;
@@ -84,25 +98,15 @@ public final class PublicNoticeProvider extends ContentProvider{
                 break;
 
             case CITY_URI_CODE:
+            case CITY_WITH_ID_URI_CODE:
                 retCursor = dbHelper.getReadableDatabase().query(
-                PublicNoticeContract.NoticeEntry.TABLE_NAME,
+                PublicNoticeContract.CityEntry.TABLE_NAME,
                 projection,
                 selection,
                 null,
                 null,
                 null,
                 sortOrder);
-                break;
-
-            case CITY_WITH_ID_URI_CODE:
-
-                retCursor = dbHelper.getReadableDatabase().query(PublicNoticeContract.CityEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
                 break;
 
             default:
@@ -116,13 +120,14 @@ public final class PublicNoticeProvider extends ContentProvider{
 
     @Override
     public String getType(Uri uri) {
-//TODO: gonna need a notice by ID I'm sure.
         switch(uriMatcher.match(uri)){
             case NOTICE_WITH_CITY_AND_DATE_URI_CODE:
             case NOTICE_WITH_CITY_URI_CODE:
             case NOTICE_URI_CODE:
                 return PublicNoticeContract.NoticeEntry.CONTENT_TYPE;
 
+            case NOTICE_URI_WITH_ID_CODE:
+                return PublicNoticeContract.NoticeEntry.CONTENT_ITEM_TYPE;
 
             case CITY_URI_CODE:
                 return PublicNoticeContract.CityEntry.CONTENT_TYPE;

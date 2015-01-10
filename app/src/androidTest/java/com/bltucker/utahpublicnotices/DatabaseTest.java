@@ -14,7 +14,7 @@ import java.util.Set;
 public class DatabaseTest extends AndroidTestCase {
 
 
-    public void createDbTest() throws Throwable{
+    public void testCreateDb() throws Throwable{
 
         mContext.deleteDatabase(PublicNoticeDbHelper.DATABASE_NAME);
         SQLiteDatabase db = new PublicNoticeDbHelper(this.mContext).getWritableDatabase();
@@ -24,7 +24,7 @@ public class DatabaseTest extends AndroidTestCase {
     }
 
 
-    public void insertAndReadTest(){
+    public void testInsertAndRead(){
 
         PublicNoticeDbHelper dbHelper = new PublicNoticeDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -72,9 +72,6 @@ public class DatabaseTest extends AndroidTestCase {
         assertTrue(cursorValidator.validateCursor(noticeCursor, noticeValues));
 
         dbHelper.close();
-
     }
-
-
 }
 

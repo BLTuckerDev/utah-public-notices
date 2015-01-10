@@ -17,7 +17,9 @@ public class ProviderTest extends AndroidTestCase {
 
 
 
-    public void insertAndReadTest(){
+
+
+    public void testInsertAndRead(){
 
         CursorValidator cursorValidator = new CursorValidator();
         MockValuesProvider valuesProvider = new MockValuesProvider();
@@ -29,6 +31,7 @@ public class ProviderTest extends AndroidTestCase {
         assertTrue(cityId != -1);
 
         Cursor cityCursor = mContext.getContentResolver().query(PublicNoticeContract.CityEntry.CONTENT_URI, null, null, null, null);
+        cityCursor.moveToFirst();
         cursorValidator.validateCursor(cityCursor, fakeCity);
 
         ContentValues fakeNotice = valuesProvider.createFakeNotice(cityId);
@@ -39,6 +42,7 @@ public class ProviderTest extends AndroidTestCase {
 
 
         Cursor noticeCursor = mContext.getContentResolver().query(PublicNoticeContract.NoticeEntry.CONTENT_URI, null, null,null, null);
+        noticeCursor.moveToFirst();
         cursorValidator.validateCursor(noticeCursor, fakeNotice);
 
 

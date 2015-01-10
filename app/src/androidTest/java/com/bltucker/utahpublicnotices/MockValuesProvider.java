@@ -23,7 +23,7 @@ public final class MockValuesProvider {
         noticeValues.put(PublicNoticeContract.NoticeEntry.COLUMN_DATE, "20150109");
         noticeValues.put(PublicNoticeContract.NoticeEntry.COLUMN_TIME, "5:00");
         noticeValues.put(PublicNoticeContract.NoticeEntry.COLUMN_LOCATION, "The Town Hall");
-        noticeValues.put(PublicNoticeContract.NoticeEntry.COLUMN_TIME, "Town Meeting");
+        noticeValues.put(PublicNoticeContract.NoticeEntry.COLUMN_TITLE, "Town Meeting");
         noticeValues.put(PublicNoticeContract.NoticeEntry.COLUMN_FULL_NOTICE, "/some/index.html");
 
         return noticeValues;
