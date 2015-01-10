@@ -20,11 +20,6 @@ public final class PublicNoticeSyncAdapter extends AbstractThreadedSyncAdapter{
     public static final int SYNC_INTERVAL_SECONDS = 4 * 60 * 60;
     public static final int SYNC_FLEX_TIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
 
-
-    //TODO: Move this to a notification class responsible for notifications
-    private static final int MEETING_NOTIFICATION_ID = 101;
-
-
     public PublicNoticeSyncAdapter(Context context, boolean autoInitialize){
         super(context,autoInitialize);
     }
