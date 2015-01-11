@@ -104,7 +104,7 @@ public final class PublicNoticeProvider extends ContentProvider{
                 PublicNoticeContract.CityEntry.TABLE_NAME,
                 projection,
                 selection,
-                null,
+                selectionArgs,
                 null,
                 null,
                 sortOrder);
@@ -278,6 +278,7 @@ public final class PublicNoticeProvider extends ContentProvider{
                     returnCount++;
                 }
             }
+            db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }

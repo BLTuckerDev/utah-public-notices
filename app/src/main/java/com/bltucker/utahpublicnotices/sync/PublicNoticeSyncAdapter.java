@@ -80,10 +80,10 @@ public final class PublicNoticeSyncAdapter extends AbstractThreadedSyncAdapter {
                 null);
 
         if(cityCursor.moveToFirst()){
+            return cityCursor.getLong(cityCursor.getColumnIndex(PublicNoticeContract.CityEntry._ID));
+        } else {
             //city doesn't exist need to add it.
             return addCity(city);
-        } else {
-            return cityCursor.getLong(cityCursor.getColumnIndex(PublicNoticeContract.CityEntry._ID));
         }
     }
 

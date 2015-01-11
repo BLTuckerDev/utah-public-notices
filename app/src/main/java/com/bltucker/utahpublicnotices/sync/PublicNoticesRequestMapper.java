@@ -48,7 +48,8 @@ public final class PublicNoticesRequestMapper {
 
         String month = dateSpan.select("span.month").first().text();
         String day = dateSpan.select("span.day").first().text();
-        String noticeTime = dateSpan.select("span.meetingLocation").first().text();
+        String noticeTime = dateSpan.select("span.meetingTime").first().text();
+        String noticeLocation = dateSpan.select("span.meetingLocation").first().text();
 
         String formattedDate = getFormattedDate(month, day);
 
@@ -58,6 +59,7 @@ public final class PublicNoticesRequestMapper {
         values.put(PublicNoticeContract.NoticeEntry.COLUMN_TITLE, noticeTitle);
         values.put(PublicNoticeContract.NoticeEntry.COLUMN_DATE, formattedDate);
         values.put(PublicNoticeContract.NoticeEntry.COLUMN_TIME, noticeTime);
+        values.put(PublicNoticeContract.NoticeEntry.COLUMN_LOCATION, noticeLocation);
 
         return values;
     }

@@ -49,7 +49,7 @@ public final class SettingsActivity extends PreferenceActivity implements Prefer
 
         if ( !bindingPreference ) {
             if (preference.getKey().equals(getString(R.string.city_setting_pref_key))) {
-                PublicNoticeSyncAdapter.initializeSyncAdapter(this);
+                PublicNoticeSyncAdapter.syncImmediately(this);
             } else {
                 getContentResolver().notifyChange(PublicNoticeContract.NoticeEntry.CONTENT_URI, null);
             }
