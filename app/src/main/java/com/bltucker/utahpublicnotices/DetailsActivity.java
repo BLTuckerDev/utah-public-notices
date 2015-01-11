@@ -1,15 +1,9 @@
 package com.bltucker.utahpublicnotices;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 
 
 public class DetailsActivity extends Activity {
@@ -23,7 +17,7 @@ public class DetailsActivity extends Activity {
         setContentView(R.layout.activity_details);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new NoticeDetailFragment())
                     .commit();
         }
     }
@@ -53,20 +47,4 @@ public class DetailsActivity extends Activity {
     }
 
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_details, container, false);
-            return rootView;
-        }
-    }
 }

@@ -1,21 +1,27 @@
 package com.bltucker.utahpublicnotices;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends Activity {
+public final class MainActivity extends Activity implements NoticeListFragment.NoticeListFragmentCallBackListener{
+
+    private boolean isInTabletMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new NoticeListFragment())
-                    .commit();
+
+        if(findViewById(R.id.notice_detail_container) != null){
+            isInTabletMode = true;
+            if(savedInstanceState == null){
+                getFragmentManager().beginTransaction().replace(R.id.notice_detail_container, new NoticeDetailFragment()).commit();
+            }
         }
     }
 
@@ -37,6 +43,7 @@ public class MainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startSettingsActivity();
             return true;
         }
 
@@ -44,4 +51,28 @@ public class MainActivity extends Activity {
     }
 
 
+    private void startSettingsActivity() {
+        Intent settingsIntent = new Intent(this, SettingsActivity.class);
+        startActivity(settingsIntent);
+    }
+
+
+    @Override
+    public void onItemSelected(long noticeId) {
+
+        if(isInTabletMode){
+            Bundle args = new Bundle();
+            args.putLong(DetailsActivity.NOTICE_ID_EXTRA, noticeId);
+            NoticeDetailFragment df = new NoticeDetailFragment();
+            df.setArguments(args);
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.notice_detail_container, df);
+            ft.commit();
+        } else {
+            Intent detailsIntent = new Intent(this, DetailsActivity.class);
+            detailsIntent.putExtra(DetailsActivity.NOTICE_ID_EXTRA, noticeId);
+            startActivity(detailsIntent);
+        }
+    }
 }

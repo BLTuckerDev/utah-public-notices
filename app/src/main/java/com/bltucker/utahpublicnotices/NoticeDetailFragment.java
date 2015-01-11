@@ -6,22 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class NoticeListFragment extends Fragment {
+/**
+ * A placeholder fragment containing a simple view.
+ */
+public class NoticeDetailFragment extends Fragment {
 
-    public interface NoticeListFragmentCallBackListener{
-        void onItemSelected(long noticeId);
-    }
-
-
-
-    public NoticeListFragment() {
+    public NoticeDetailFragment() {
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_details, container, false);
         return rootView;
     }
 }
