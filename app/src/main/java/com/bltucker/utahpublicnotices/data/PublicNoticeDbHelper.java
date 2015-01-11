@@ -32,6 +32,7 @@ public final class PublicNoticeDbHelper extends SQLiteOpenHelper{
                 + PublicNoticeContract.NoticeEntry.COLUMN_LOCATION + " TEXT NOT NULL, "
                 + PublicNoticeContract.NoticeEntry.COLUMN_TITLE + " TEXT NOT NULL,"
                 + PublicNoticeContract.NoticeEntry.COLUMN_FULL_NOTICE + " TEXT NOT NULL,"
+                + " UNIQUE (" + PublicNoticeContract.NoticeEntry.COLUMN_FULL_NOTICE + ") ON CONFLICT REPLACE,"
                 + " FOREIGN KEY ( " + PublicNoticeContract.NoticeEntry.COLUMN_CITY_KEY + ") REFERENCES "
                 + PublicNoticeContract.CityEntry.TABLE_NAME + " (" + PublicNoticeContract.CityEntry._ID + "));";
 

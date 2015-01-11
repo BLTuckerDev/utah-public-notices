@@ -50,7 +50,6 @@ public final class NoticeListFragment extends Fragment implements LoaderManager.
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(NOTICE_LOADER, null, this);
-
         super.onActivityCreated(savedInstanceState);
     }
 

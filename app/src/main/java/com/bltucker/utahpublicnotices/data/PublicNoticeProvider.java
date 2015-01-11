@@ -255,14 +255,17 @@ public final class PublicNoticeProvider extends ContentProvider{
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
         final int match = uriMatcher.match(uri);
-
+        int insertCount = 0;
         switch(match){
             case NOTICE_URI_CODE:
-                return this.bulkInsertNotices(values);
+                insertCount = this.bulkInsertNotices(values);
 
             default:
-                return super.bulkInsert(uri, values);
+                insertCount = super.bulkInsert(uri, values);
         }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return insertCount;
     }
 
 
@@ -323,6 +326,5 @@ public final class PublicNoticeProvider extends ContentProvider{
                 null,
                 null,
                 sortOrder);
-
     }
 }
