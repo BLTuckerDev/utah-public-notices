@@ -7,8 +7,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.bltucker.utahpublicnotices.sync.PublicNoticeSyncAdapter;
+import com.bltucker.utahpublicnotices.utils.PreferenceFetcher;
 
-public final class MainActivity extends Activity implements NoticeListFragment.NoticeListFragmentCallBackListener{
+
+public final class MainActivity extends Activity
+        implements NoticeListFragment.NoticeListFragmentCallBackListener,InitialSetup.InitialSetupFragmentListener{
 
     private boolean isInTabletMode = false;
 
@@ -17,6 +21,24 @@ public final class MainActivity extends Activity implements NoticeListFragment.N
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initializeMasterContainer(savedInstanceState);
+        initializeDetailContainer(savedInstanceState);
+
+    }
+
+
+    private void initializeMasterContainer(Bundle savedInstanceState){
+
+        String currentCity = new PreferenceFetcher().getCityPreference(this);
+        if(currentCity.equals(getString(R.string.city_setting_pref_default))){
+            getFragmentManager().beginTransaction().replace(R.id.fragment_master_container, InitialSetup.newInstance()).commit();
+        } else {
+            getFragmentManager().beginTransaction().replace(R.id.fragment_master_container, new NoticeListFragment()).commit();
+        }
+    }
+
+
+    private void initializeDetailContainer(Bundle savedInstanceState){
         if(findViewById(R.id.notice_detail_container) != null){
             isInTabletMode = true;
             if(savedInstanceState == null){
@@ -74,5 +96,12 @@ public final class MainActivity extends Activity implements NoticeListFragment.N
             detailsIntent.putExtra(DetailsActivity.NOTICE_ID_EXTRA, noticeId);
             startActivity(detailsIntent);
         }
+    }
+
+
+    @Override
+    public void onInitialSetupCompleted() {
+        PublicNoticeSyncAdapter.syncImmediately(this);
+        getFragmentManager().beginTransaction().replace(R.id.fragment_master_container, new NoticeListFragment()).commit();
     }
 }
