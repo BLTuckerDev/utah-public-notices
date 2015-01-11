@@ -4,6 +4,9 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public final class PublicNoticeContract {
 
     public static final String CONTENT_AUTHORITY = "com.bltucker.utahpublicnotices";
@@ -15,6 +18,12 @@ public final class PublicNoticeContract {
     public static final String PATH_TO_NOTICE = "notice";
 
     public static final String DATE_FORMAT = "yyyyMMdd";
+
+
+    public static String getDbDateString(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        return sdf.format(date);
+    }
 
 
     public static final class CityEntry implements BaseColumns {

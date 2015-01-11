@@ -19,6 +19,9 @@ import com.bltucker.utahpublicnotices.R;
 import com.bltucker.utahpublicnotices.data.PublicNoticeContract;
 import com.bltucker.utahpublicnotices.utils.PreferenceFetcher;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public final class PublicNoticeSyncAdapter extends AbstractThreadedSyncAdapter {
@@ -34,7 +37,12 @@ public final class PublicNoticeSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient contentProviderClient, SyncResult syncResult) {
+        deleteOldData();
+        getNewData();
+    }
 
+
+    private void getNewData() {
         PreferenceFetcher prefFetcher = new PreferenceFetcher();
         String city = prefFetcher.getCityPreference(getContext());
         long cityId = getCityId(city);
@@ -46,10 +54,20 @@ public final class PublicNoticeSyncAdapter extends AbstractThreadedSyncAdapter {
             values.put(PublicNoticeContract.NoticeEntry.COLUMN_CITY_KEY, cityId);
         }
 
-        //TODO: delete meeting notices that are in the past!
-
         ContentValues[] values = notices.toArray(new ContentValues[notices.size()]);
         getContext().getContentResolver().bulkInsert(PublicNoticeContract.NoticeEntry.CONTENT_URI, values);
+    }
+
+
+    private void deleteOldData() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        Date yesterday = cal.getTime();
+        String yesterdayString = PublicNoticeContract.getDbDateString(yesterday);
+
+        getContext().getContentResolver().delete(PublicNoticeContract.NoticeEntry.CONTENT_URI,
+                PublicNoticeContract.NoticeEntry.COLUMN_DATE + " <= ?",
+                new String[]{yesterdayString});
     }
 
 
