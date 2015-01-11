@@ -5,10 +5,13 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -34,14 +37,44 @@ public final class PublicNoticeSyncAdapter extends AbstractThreadedSyncAdapter {
 
         PreferenceFetcher prefFetcher = new PreferenceFetcher();
         String city = prefFetcher.getCityPreference(getContext());
+        long cityId = getCityId(city);
 
         UtahOpenGovApiProvider apiProvider = new UtahOpenGovApiProvider(city);
         List<ContentValues> notices = apiProvider.getPublicNotices();
+
+        for(ContentValues values : notices){
+            values.put(PublicNoticeContract.NoticeEntry.COLUMN_CITY_KEY, cityId);
+        }
 
         //TODO: delete meeting notices that are in the past!
 
         ContentValues[] values = notices.toArray(new ContentValues[notices.size()]);
         getContext().getContentResolver().bulkInsert(PublicNoticeContract.NoticeEntry.CONTENT_URI, values);
+    }
+
+
+    private long getCityId(String city){
+
+        Cursor cityCursor = getContext().getContentResolver().query(PublicNoticeContract.CityEntry.CONTENT_URI,
+                null,
+                PublicNoticeContract.CityEntry.COLUMN_NAME + " = ?",
+                new String[]{city},
+                null);
+
+        if(cityCursor.moveToFirst()){
+            //city doesn't exist need to add it.
+            return addCity(city);
+        } else {
+            return cityCursor.getLong(cityCursor.getColumnIndex(PublicNoticeContract.CityEntry._ID));
+        }
+    }
+
+
+    private long addCity(String city) {
+        ContentValues cityValues = new ContentValues();
+        cityValues.put(PublicNoticeContract.CityEntry.COLUMN_NAME, city);
+        Uri insertUri = getContext().getContentResolver().insert(PublicNoticeContract.CityEntry.CONTENT_URI, cityValues);
+        return ContentUris.parseId(insertUri);
     }
 
 
