@@ -17,9 +17,11 @@ import java.util.Date;
 
 public final class NoticeAdapter extends CursorAdapter {
 
-    private final SimpleDateFormat dbDateFormatter = new SimpleDateFormat(PublicNoticeContract.DATE_FORMAT);
-    private final SimpleDateFormat dayOfWeekFormatter = new SimpleDateFormat("EEEE");
-    private final SimpleDateFormat fullDisplayDateFormatter = new SimpleDateFormat("MMMM dd yyyy");
+    private static final SimpleDateFormat dbDateFormatter = new SimpleDateFormat(PublicNoticeContract.DATE_FORMAT);
+    private static final SimpleDateFormat dayOfWeekFormatter = new SimpleDateFormat("EEEE");
+    private static final SimpleDateFormat fullDisplayDateFormatter = new SimpleDateFormat("MMMM dd yyyy");
+    private static final SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a");
+    private static final SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
 
 
     public NoticeAdapter(Context context, Cursor cursor, int flags){
@@ -46,7 +48,8 @@ public final class NoticeAdapter extends CursorAdapter {
             NoticeListItemViewHolder viewHolder = (NoticeListItemViewHolder) view.getTag();
 
             viewHolder.dayTextView.setText(dayOfWeekFormatter.format(meetingDate));
-            viewHolder.timeTextView.setText(noticeCursor.getTime());
+            Date date = _24HourSDF.parse(noticeCursor.getTime());
+            viewHolder.timeTextView.setText(_12HourSDF.format(date));
             viewHolder.dateTextView.setText(fullDisplayDateFormatter.format(meetingDate));
             viewHolder.titleTextView.setText(noticeCursor.getTitle());
 

@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,6 +38,33 @@ public final class NoticeListFragment extends Fragment implements LoaderManager.
     private ListView listView;
 
     public NoticeListFragment() {
+        this.setHasOptionsMenu(true);
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater){
+        inflater.inflate(R.menu.menu_fragment_notice_list, menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.action_settings:
+                startSettingsActivity();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    private void startSettingsActivity() {
+        Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
+        startActivity(settingsIntent);
     }
 
 
