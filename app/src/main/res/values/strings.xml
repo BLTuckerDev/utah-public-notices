@@ -15,5 +15,6 @@
     <string name="initial_setup_instructions">Please enter your city name here. You can always changes this city later in the settings menu.</string>
     <string name="inital_setup_complete">Show Notices</string>
     <string name="please_enter_a_city_name">Please enter the name of a city.</string>
+    <string name="action_share">Share</string>
 
 </resources>
