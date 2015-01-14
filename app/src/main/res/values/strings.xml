@@ -16,5 +16,6 @@
     <string name="inital_setup_complete">Show Notices</string>
     <string name="please_enter_a_city_name">Please enter the name of a city.</string>
     <string name="action_share">Share</string>
+    <string name="action_map">View Location</string>
 
 </resources>
