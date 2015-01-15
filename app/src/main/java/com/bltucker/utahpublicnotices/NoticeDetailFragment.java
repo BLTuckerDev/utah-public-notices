@@ -29,6 +29,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
     private static final int NOTICE_DETAIL_LOADER = 0;
 
     //TODO disable the share and map buttons until the cursor loads!
+    private boolean cursorLoaded = false;
 
     private long currentNoticeId;
 
@@ -36,7 +37,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     private WebView webView;
 
-    private MenuItem shareMenuItem;
+    private ShareActionProvider shareActionProvider;
 
     public NoticeDetailFragment() {
         this.setHasOptionsMenu(true);
@@ -46,7 +47,8 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragment_details, menu);
-        shareMenuItem = menu.findItem(R.id.action_share);
+        shareActionProvider = (ShareActionProvider) menu.findItem(R.id.action_share).getActionProvider();
+        setupShareProvider();
     }
 
 
@@ -78,6 +80,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
         webView = (WebView) rootView.findViewById(R.id.fragment_detail_web_view);
 
@@ -105,12 +108,6 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
 
     private void setupShareProvider(){
-        if(null == shareMenuItem){
-            return;
-        }
-
-        ShareActionProvider shareActionProvider = (ShareActionProvider) shareMenuItem.getActionProvider();
-
         if(shareActionProvider != null){
             shareActionProvider.setShareIntent(getShareIntent());
         }
@@ -148,6 +145,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+        cursorLoaded = true;
         if(data.moveToFirst()){
             currentNoticeCusor = new NoticeCursor(data);
             webView.loadUrl(currentNoticeCusor.getFullNotice());
