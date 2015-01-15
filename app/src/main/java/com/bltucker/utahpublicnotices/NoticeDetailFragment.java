@@ -1,18 +1,37 @@
 package com.bltucker.utahpublicnotices;
 
 import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ShareActionProvider;
 
-public final class NoticeDetailFragment extends Fragment {
+import com.bltucker.utahpublicnotices.data.NoticeCursor;
+import com.bltucker.utahpublicnotices.data.PublicNoticeContract;
+import com.bltucker.utahpublicnotices.sync.UtahOpenGovApiProvider;
+
+public final class NoticeDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private final String LOG_TAG = NoticeDetailFragment.class.getSimpleName();
+
+    private static final int NOTICE_DETAIL_LOADER = 0;
+
+
+    private long currentNoticeId;
+
+    private WebView webView;
 
     public NoticeDetailFragment() {
         this.setHasOptionsMenu(true);
@@ -70,6 +89,51 @@ public final class NoticeDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+        webView = (WebView) rootView.findViewById(R.id.fragment_detail_web_view);
+
+        getArgumentsFromBundle();
         return rootView;
+    }
+
+
+    private void getArgumentsFromBundle(){
+
+        Bundle args = getArguments();
+
+        if(args != null && args.containsKey(DetailsActivity.NOTICE_ID_EXTRA)){
+            currentNoticeId = args.getLong(DetailsActivity.NOTICE_ID_EXTRA);
+            getLoaderManager().initLoader(NOTICE_DETAIL_LOADER, null, this);
+        }
+    }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        Uri noticeUriWithId = PublicNoticeContract.NoticeEntry.buildNoticeUri(currentNoticeId);
+
+        return new CursorLoader(
+                getActivity(),
+                noticeUriWithId,
+                null,
+                null,
+                null,
+                null);
+    }
+
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        if(data.moveToFirst()){
+            NoticeCursor currentNoticeCusor = new NoticeCursor(data);
+            webView.loadUrl(currentNoticeCusor.getFullNotice());
+        }
+    }
+
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
