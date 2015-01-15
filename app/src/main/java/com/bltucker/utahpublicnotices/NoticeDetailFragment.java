@@ -68,8 +68,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
     private void showMeetingOnMap() {
         Intent mapIntent = new Intent();
         mapIntent.setAction(Intent.ACTION_VIEW);
-        //TODO replace with actual meeting location!
-        String meetingAddress = "10 North Main, Cedar City,  84720";
+        String meetingAddress = currentNoticeCusor.getAddress();
         mapIntent.setData(Uri.parse(String.format("geo:0,0?q=%s", meetingAddress)));
         startActivity(mapIntent);
     }
