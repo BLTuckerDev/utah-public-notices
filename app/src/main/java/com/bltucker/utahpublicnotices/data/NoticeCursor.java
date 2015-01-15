@@ -21,6 +21,11 @@ public final class NoticeCursor {
     }
 
 
+    public void close(){
+        cursor.close();
+    }
+
+
     public String getFullNotice(){
         return cursor.getString(cursor.getColumnIndex(PublicNoticeContract.NoticeEntry.COLUMN_FULL_NOTICE));
     }
