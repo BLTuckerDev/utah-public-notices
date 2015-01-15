@@ -28,6 +28,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     private static final int NOTICE_DETAIL_LOADER = 0;
 
+    //TODO disable the share and map buttons until the cursor loads!
 
     private long currentNoticeId;
 
@@ -55,9 +56,6 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
         switch(item.getItemId()){
             case R.id.action_map:
                 showMeetingOnMap();
-                return true;
-            case R.id.action_share:
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
