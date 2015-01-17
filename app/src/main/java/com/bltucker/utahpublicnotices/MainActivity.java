@@ -11,7 +11,6 @@ import com.bltucker.utahpublicnotices.sync.PublicNoticeSyncAdapter;
 import com.bltucker.utahpublicnotices.utils.PreferenceFetcher;
 
 
-//TODO in tablet mode auto select the first item if available
 //TODO add ability to notify 1 hour before meeting
 //TODO app icon
 
