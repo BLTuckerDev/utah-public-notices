@@ -11,8 +11,6 @@ import com.bltucker.utahpublicnotices.sync.PublicNoticeSyncAdapter;
 import com.bltucker.utahpublicnotices.utils.PreferenceFetcher;
 
 
-//TODO selection color on list
-//TODO remember selection and scroll to it as needed
 //TODO in tablet mode auto select the first item if available
 //TODO add ability to notify 1 hour before meeting
 //TODO app icon
@@ -29,11 +27,14 @@ public final class MainActivity extends Activity
 
         initializeMasterContainer(savedInstanceState);
         initializeDetailContainer(savedInstanceState);
-
     }
 
 
     private void initializeMasterContainer(Bundle savedInstanceState){
+
+        if(savedInstanceState != null){
+            return;
+        }
 
         String currentCity = new PreferenceFetcher().getCityPreference(this);
         if(currentCity.equals(getString(R.string.city_setting_pref_default))){

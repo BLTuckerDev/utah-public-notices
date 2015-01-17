@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -27,17 +28,21 @@ import java.util.Date;
 public final class NoticeListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int NOTICE_LOADER = 1;
-    private String currentCity;
+    private static final String SELECTED_POSITION = "selectedPosition";
 
     public interface NoticeListFragmentCallBackListener{
         void onItemSelected(long noticeId);
     }
 
+    private String currentCity;
     private NoticeListFragmentCallBackListener listener;
     private NoticeAdapter adapter;
     private ListView listView;
+    private int selectedPosition = 0;
+
 
     public NoticeListFragment() {
+        this.setRetainInstance(true);
         this.setHasOptionsMenu(true);
     }
 
@@ -100,12 +105,27 @@ public final class NoticeListFragment extends Fragment implements LoaderManager.
 
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (selectedPosition != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_POSITION, selectedPosition);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main_list, container, false);
         listView = (ListView) rootView.findViewById(R.id.fragment_notice_list_list_view);
         attachAdapter();
         setupOnClickListener();
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(SELECTED_POSITION)){
+            selectedPosition = savedInstanceState.getInt(SELECTED_POSITION);
+        }
+
+
         return rootView;
     }
 
@@ -113,7 +133,7 @@ public final class NoticeListFragment extends Fragment implements LoaderManager.
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                selectedPosition = position;
                 if(NoticeListFragment.this.listener != null){
                     Cursor cursor = adapter.getCursor();
 
@@ -148,6 +168,7 @@ public final class NoticeListFragment extends Fragment implements LoaderManager.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
+        listView.smoothScrollToPosition(selectedPosition);
     }
 
 
