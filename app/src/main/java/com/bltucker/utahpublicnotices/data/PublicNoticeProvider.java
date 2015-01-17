@@ -1,6 +1,7 @@
 package com.bltucker.utahpublicnotices.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -78,7 +79,7 @@ public final class PublicNoticeProvider extends ContentProvider{
         switch(uriMatcher.match(uri)){
 
             case NOTICE_URI_CODE:
-            case NOTICE_URI_WITH_ID_CODE:
+
                 retCursor = dbHelper.getReadableDatabase().query(
                         PublicNoticeContract.NoticeEntry.TABLE_NAME,
                         projection,
@@ -88,6 +89,19 @@ public final class PublicNoticeProvider extends ContentProvider{
                         null,
                         sortOrder);
                 break;
+
+            case NOTICE_URI_WITH_ID_CODE:
+
+                retCursor = dbHelper.getReadableDatabase().query(
+                        PublicNoticeContract.NoticeEntry.TABLE_NAME,
+                        projection,
+                        PublicNoticeContract.NoticeEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
+                        null,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+
 
             case NOTICE_WITH_CITY_AND_DATE_URI_CODE:
                 retCursor = getNoticesByCityAndDate(uri, projection, sortOrder);
@@ -99,15 +113,28 @@ public final class PublicNoticeProvider extends ContentProvider{
                 break;
 
             case CITY_URI_CODE:
-            case CITY_WITH_ID_URI_CODE:
                 retCursor = dbHelper.getReadableDatabase().query(
-                PublicNoticeContract.CityEntry.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder);
+                    PublicNoticeContract.CityEntry.TABLE_NAME,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null,
+                    null,
+                    sortOrder);
+                break;
+
+            case CITY_WITH_ID_URI_CODE:
+
+                retCursor = dbHelper.getReadableDatabase().query(
+                        PublicNoticeContract.CityEntry.TABLE_NAME,
+                        projection,
+                        PublicNoticeContract.CityEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
+                        null,
+                        null,
+                        null,
+                        sortOrder);
+
+
                 break;
 
             default:

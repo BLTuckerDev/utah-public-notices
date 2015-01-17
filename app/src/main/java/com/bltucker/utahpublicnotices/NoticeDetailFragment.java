@@ -34,7 +34,6 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     private static final int NOTICE_DETAIL_LOADER = 0;
 
-    private boolean cursorLoaded = false;
 
     private long currentNoticeId;
 
@@ -75,7 +74,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     private void addCalendarAppointment(){
 
-        if(!cursorLoaded){
+        if(null == currentNoticeCusor){
             return;
         }
 
@@ -110,7 +109,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     private void showMeetingOnMap() {
 
-        if(!cursorLoaded){
+        if(null == currentNoticeCusor){
             return;
         }
 
@@ -155,7 +154,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
 
     private void setupShareProvider(){
-        if(shareActionProvider != null && cursorLoaded){
+        if(shareActionProvider != null && currentNoticeCusor != null){
             shareActionProvider.setShareIntent(getShareIntent());
         }
     }
@@ -184,9 +183,9 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        cursorLoaded = true;
         if(data.moveToFirst()){
             currentNoticeCusor = new NoticeCursor(data);
+            Log.d(LOG_TAG, "Detail fragment noticeId: " +currentNoticeCusor.getId());
             webView.loadUrl(currentNoticeCusor.getFullNotice());
             setupShareProvider();
         }
@@ -195,7 +194,6 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        cursorLoaded = false;
         currentNoticeCusor = null;
     }
 }
