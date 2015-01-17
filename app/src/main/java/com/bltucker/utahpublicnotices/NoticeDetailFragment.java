@@ -28,7 +28,6 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     private static final int NOTICE_DETAIL_LOADER = 0;
 
-    //TODO disable the share and map buttons until the cursor loads!
     private boolean cursorLoaded = false;
 
     private long currentNoticeId;
@@ -66,6 +65,11 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
 
     private void showMeetingOnMap() {
+
+        if(!cursorLoaded){
+            return;
+        }
+
         Intent mapIntent = new Intent();
         mapIntent.setAction(Intent.ACTION_VIEW);
         String meetingAddress = currentNoticeCusor.getAddress();
@@ -74,17 +78,14 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
     }
 
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
         webView = (WebView) rootView.findViewById(R.id.fragment_detail_web_view);
-
         getArgumentsFromBundle();
+
         return rootView;
     }
 
@@ -108,7 +109,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
 
     private void setupShareProvider(){
-        if(shareActionProvider != null){
+        if(shareActionProvider != null && cursorLoaded){
             shareActionProvider.setShareIntent(getShareIntent());
         }
     }
@@ -129,16 +130,8 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
         Uri noticeUriWithId = PublicNoticeContract.NoticeEntry.buildNoticeUri(currentNoticeId);
-
-        return new CursorLoader(
-                getActivity(),
-                noticeUriWithId,
-                null,
-                null,
-                null,
-                null);
+        return new CursorLoader(getActivity(),noticeUriWithId, null, null, null, null);
     }
 
 
@@ -155,7 +148,5 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
+    public void onLoaderReset(Loader<Cursor> loader) {    }
 }
