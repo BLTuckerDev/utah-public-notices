@@ -11,6 +11,13 @@ import com.bltucker.utahpublicnotices.sync.PublicNoticeSyncAdapter;
 import com.bltucker.utahpublicnotices.utils.PreferenceFetcher;
 
 
+//TODO selection color on list
+//TODO remember selection and scroll to it as needed
+//TODO in tablet mode auto select the first item if available
+//TODO add ability to notify 1 hour before meeting
+//TODO add ability to add entry to user's calendar
+//TODO app icon
+
 public final class MainActivity extends Activity
         implements NoticeListFragment.NoticeListFragmentCallBackListener,InitialSetup.InitialSetupFragmentListener{
 

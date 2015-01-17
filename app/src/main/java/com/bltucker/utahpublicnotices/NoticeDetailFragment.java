@@ -92,7 +92,9 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     @Override
     public void onDestroy() {
-        currentNoticeCusor.close();
+        if(currentNoticeCusor != null){
+            currentNoticeCusor.close();
+        }
         super.onDestroy();
     }
 
@@ -148,5 +150,8 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {    }
+    public void onLoaderReset(Loader<Cursor> loader) {
+        cursorLoaded = false;
+        currentNoticeCusor = null;
+    }
 }
