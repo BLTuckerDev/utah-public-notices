@@ -144,26 +144,8 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
 
     private void addCalendarAppointment(){
-
-//TODO convert to object in charge of making appointments
-        try{
-            Calendar noticeCalendar = currentNoticeCursor.getCalendarDateTime();
-
-            Intent intent = new Intent(Intent.ACTION_INSERT)
-                    .setData(CalendarContract.Events.CONTENT_URI)
-                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, noticeCalendar.getTimeInMillis())
-                    .putExtra(CalendarContract.Events.TITLE, currentNoticeCursor.getTitle())
-                    .putExtra(CalendarContract.Events.DESCRIPTION,  currentNoticeCursor.getFullNotice())
-                    .putExtra(CalendarContract.Events.EVENT_LOCATION, currentNoticeCursor.getAddress())
-                    .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
-
-            startActivity(intent);
-
-
-        } catch(Exception ex){
-            Toast.makeText(getActivity(), getActivity().getString(R.string.unable_add_to_calendar), Toast.LENGTH_SHORT).show();
-            Log.d(LOG_TAG, ex.toString());
-        }
+        CalendarEventCreator eventCreator = new CalendarEventCreator();
+        eventCreator.createCalendarEvent(getActivity(), currentNoticeCursor);
     }
 
 
