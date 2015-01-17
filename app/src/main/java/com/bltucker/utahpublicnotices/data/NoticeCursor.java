@@ -52,6 +52,6 @@ public final class NoticeCursor {
 
 
     public long getId() {
-        return cursor.getLong(cursor.getColumnIndex(PublicNoticeContract.NoticeEntry._ID));
+        return cursor.getLong(0);
     }
 }
