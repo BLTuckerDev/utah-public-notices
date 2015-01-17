@@ -10,8 +10,6 @@ import android.view.MenuItem;
 import com.bltucker.utahpublicnotices.sync.PublicNoticeSyncAdapter;
 import com.bltucker.utahpublicnotices.utils.PreferenceFetcher;
 
-
-//TODO calendar event responsbility in separate object
 //TODO app icon
 
 public final class MainActivity extends Activity
