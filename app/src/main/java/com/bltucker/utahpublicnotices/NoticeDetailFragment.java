@@ -121,8 +121,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
         webView = (WebView) rootView.findViewById(R.id.fragment_detail_web_view);
@@ -138,7 +137,10 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
         if(args != null && args.containsKey(DetailsActivity.NOTICE_ID_EXTRA)){
             currentNoticeId = args.getLong(DetailsActivity.NOTICE_ID_EXTRA);
             getLoaderManager().initLoader(NOTICE_DETAIL_LOADER, null, this);
+        } else {
+            webView.loadUrl("http://utah.gov/pmn/index.html");
         }
+
     }
 
 
