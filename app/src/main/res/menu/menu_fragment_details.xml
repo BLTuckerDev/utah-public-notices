@@ -16,4 +16,9 @@
           android:showAsAction="always"
           android:icon="@drawable/perm_group_calendar"/>
 
+    <item android:id="@+id/action_notify"
+          android:title="Notify Me"
+          android:showAsAction="never"/>
+
+
 </menu>

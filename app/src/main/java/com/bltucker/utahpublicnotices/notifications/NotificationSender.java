@@ -1,4 +1,4 @@
-package com.bltucker.utahpublicnotices.sync;
+package com.bltucker.utahpublicnotices.notifications;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -13,9 +13,9 @@ import com.bltucker.utahpublicnotices.MainActivity;
 import com.bltucker.utahpublicnotices.R;
 import com.bltucker.utahpublicnotices.data.NoticeCursor;
 
-public final class NotificationSender {
+final class NotificationSender {
 
-    private static final int MEETING_NOTIFICATION_ID = 101;
+    private final String LOG_TAG = NotificationSender.class.getSimpleName();
 
     private final Context context;
 
@@ -48,6 +48,7 @@ public final class NotificationSender {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(MEETING_NOTIFICATION_ID, builder.build());
+        Long id = noticeCursor.getId();
+        notificationManager.notify(id.hashCode(), builder.build());
     }
 }

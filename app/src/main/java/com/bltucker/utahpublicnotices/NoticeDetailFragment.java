@@ -1,7 +1,10 @@
 package com.bltucker.utahpublicnotices;
 
+import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 
 import com.bltucker.utahpublicnotices.data.NoticeCursor;
 import com.bltucker.utahpublicnotices.data.PublicNoticeContract;
+import com.bltucker.utahpublicnotices.notifications.NotificationAlarmReceiver;
 import com.bltucker.utahpublicnotices.utils.NoticeDateFormatHelper;
 
 import java.util.Calendar;
@@ -65,8 +69,36 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
             case R.id.action_calendar:
                 addCalendarAppointment();
                 return true;
+            case R.id.action_notify:
+                createNoticeNotification();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    private void createNoticeNotification(){
+//TODO toasts !!!
+        if(null == currentNoticeCursor){
+            return;
+        }
+
+
+        Intent alarmIntent = new Intent(getActivity(), NotificationAlarmReceiver.class);
+        alarmIntent.putExtra(NotificationAlarmReceiver.NOTIFICATION_NOTICE_ID_EXTRA, currentNoticeCursor.getId());
+
+        try{
+            Calendar noticeCalendar = currentNoticeCursor.getCalendarDateTime();
+            noticeCalendar.add(Calendar.HOUR, -1);
+
+            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, 0);
+
+            alarmManager.set(AlarmManager.RTC, noticeCalendar.getTimeInMillis(), pendingAlarmIntent);
+
+        } catch(Exception ex){
+            Log.d(LOG_TAG, ex.toString());
         }
     }
 
@@ -76,21 +108,13 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
         if(null == currentNoticeCursor){
             return;
         }
-
+//TODO convert to object in charge of making appointments
         try{
-            NoticeDateFormatHelper dateFormatHelper = new NoticeDateFormatHelper();
-
-            Date noticeDate = dateFormatHelper.getDbDateFormatter().parse(currentNoticeCursor.getDate());
-            Date noticeTime = dateFormatHelper.get24HourDateFormatter().parse(currentNoticeCursor.getTime());
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(noticeDate);
-            calendar.set(Calendar.HOUR, noticeTime.getHours());
-            calendar.set(Calendar.MINUTE, noticeTime.getMinutes());
+            Calendar noticeCalendar = currentNoticeCursor.getCalendarDateTime();
 
             Intent intent = new Intent(Intent.ACTION_INSERT)
                     .setData(CalendarContract.Events.CONTENT_URI)
-                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, calendar.getTimeInMillis())
+                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, noticeCalendar.getTimeInMillis())
                     .putExtra(CalendarContract.Events.TITLE, currentNoticeCursor.getTitle())
                     .putExtra(CalendarContract.Events.DESCRIPTION,  currentNoticeCursor.getFullNotice())
                     .putExtra(CalendarContract.Events.EVENT_LOCATION, currentNoticeCursor.getAddress())

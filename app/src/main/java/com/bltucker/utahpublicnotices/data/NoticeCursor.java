@@ -2,6 +2,12 @@ package com.bltucker.utahpublicnotices.data;
 
 import android.database.Cursor;
 
+import com.bltucker.utahpublicnotices.utils.NoticeDateFormatHelper;
+
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
+
 public final class NoticeCursor {
 
     private final Cursor cursor;
@@ -53,5 +59,20 @@ public final class NoticeCursor {
 
     public long getId() {
         return cursor.getLong(0);
+    }
+
+
+    public Calendar getCalendarDateTime() throws ParseException {
+        NoticeDateFormatHelper dateFormatHelper = new NoticeDateFormatHelper();
+
+        Date noticeDate = dateFormatHelper.getDbDateFormatter().parse(this.getDate());
+        Date noticeTime = dateFormatHelper.get24HourDateFormatter().parse(this.getTime());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(noticeDate);
+        calendar.set(Calendar.HOUR, noticeTime.getHours());
+        calendar.set(Calendar.MINUTE, noticeTime.getMinutes());
+
+        return calendar;
     }
 }
