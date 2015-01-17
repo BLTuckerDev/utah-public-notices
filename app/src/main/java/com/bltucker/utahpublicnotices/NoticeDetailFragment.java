@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.bltucker.utahpublicnotices.data.NoticeCursor;
 import com.bltucker.utahpublicnotices.data.PublicNoticeContract;
-import com.bltucker.utahpublicnotices.sync.UtahOpenGovApiProvider;
 import com.bltucker.utahpublicnotices.utils.NoticeDateFormatHelper;
 
 import java.util.Calendar;
@@ -37,7 +36,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     private long currentNoticeId;
 
-    private NoticeCursor currentNoticeCusor;
+    private NoticeCursor currentNoticeCursor;
 
     private WebView webView;
 
@@ -74,15 +73,15 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     private void addCalendarAppointment(){
 
-        if(null == currentNoticeCusor){
+        if(null == currentNoticeCursor){
             return;
         }
 
         try{
             NoticeDateFormatHelper dateFormatHelper = new NoticeDateFormatHelper();
 
-            Date noticeDate = dateFormatHelper.getDbDateFormatter().parse(currentNoticeCusor.getDate());
-            Date noticeTime = dateFormatHelper.get24HourDateFormatter().parse(currentNoticeCusor.getTime());
+            Date noticeDate = dateFormatHelper.getDbDateFormatter().parse(currentNoticeCursor.getDate());
+            Date noticeTime = dateFormatHelper.get24HourDateFormatter().parse(currentNoticeCursor.getTime());
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(noticeDate);
@@ -92,9 +91,9 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
             Intent intent = new Intent(Intent.ACTION_INSERT)
                     .setData(CalendarContract.Events.CONTENT_URI)
                     .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, calendar.getTimeInMillis())
-                    .putExtra(CalendarContract.Events.TITLE, currentNoticeCusor.getTitle())
-                    .putExtra(CalendarContract.Events.DESCRIPTION,  currentNoticeCusor.getFullNotice())
-                    .putExtra(CalendarContract.Events.EVENT_LOCATION, currentNoticeCusor.getAddress())
+                    .putExtra(CalendarContract.Events.TITLE, currentNoticeCursor.getTitle())
+                    .putExtra(CalendarContract.Events.DESCRIPTION,  currentNoticeCursor.getFullNotice())
+                    .putExtra(CalendarContract.Events.EVENT_LOCATION, currentNoticeCursor.getAddress())
                     .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
 
             startActivity(intent);
@@ -109,13 +108,13 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     private void showMeetingOnMap() {
 
-        if(null == currentNoticeCusor){
+        if(null == currentNoticeCursor){
             return;
         }
 
         Intent mapIntent = new Intent();
         mapIntent.setAction(Intent.ACTION_VIEW);
-        String meetingAddress = currentNoticeCusor.getAddress();
+        String meetingAddress = currentNoticeCursor.getAddress();
         mapIntent.setData(Uri.parse(String.format("geo:0,0?q=%s", meetingAddress)));
         startActivity(mapIntent);
     }
@@ -133,17 +132,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
     }
 
 
-    @Override
-    public void onDestroy() {
-        if(currentNoticeCusor != null){
-            currentNoticeCusor.close();
-        }
-        super.onDestroy();
-    }
-
-
     private void getArgumentsFromBundle(){
-
         Bundle args = getArguments();
 
         if(args != null && args.containsKey(DetailsActivity.NOTICE_ID_EXTRA)){
@@ -154,7 +143,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
 
     private void setupShareProvider(){
-        if(shareActionProvider != null && currentNoticeCusor != null){
+        if(shareActionProvider != null && currentNoticeCursor != null){
             shareActionProvider.setShareIntent(getShareIntent());
         }
     }
@@ -165,8 +154,8 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
 
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, currentNoticeCusor.getTitle());
-        String formattedMessage = String.format("%s %s \n %s", currentNoticeCusor.getTime(), currentNoticeCusor.getDate(), currentNoticeCusor.getAddress());
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, currentNoticeCursor.getTitle());
+        String formattedMessage = String.format("%s %s \n %s", currentNoticeCursor.getTime(), currentNoticeCursor.getDate(), currentNoticeCursor.getAddress());
         shareIntent.putExtra(Intent.EXTRA_TEXT, formattedMessage);
 
         return shareIntent;
@@ -184,9 +173,9 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         if(data.moveToFirst()){
-            currentNoticeCusor = new NoticeCursor(data);
-            Log.d(LOG_TAG, "Detail fragment noticeId: " +currentNoticeCusor.getId());
-            webView.loadUrl(currentNoticeCusor.getFullNotice());
+            currentNoticeCursor = new NoticeCursor(data);
+            Log.d(LOG_TAG, "Detail fragment noticeId: " + currentNoticeCursor.getId());
+            webView.loadUrl(currentNoticeCursor.getFullNotice());
             setupShareProvider();
         }
     }
@@ -194,6 +183,5 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        currentNoticeCusor = null;
     }
 }
