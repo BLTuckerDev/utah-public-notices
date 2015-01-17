@@ -10,4 +10,10 @@
           android:title="@string/action_map"
           android:showAsAction="always"
           android:icon="@drawable/ic_action_maps_pin_drop"/>
+
+    <item android:id="@+id/action_calendar"
+          android:title="@string/add_calendar_event"
+          android:showAsAction="always"
+          android:icon="@drawable/perm_group_calendar"/>
+
 </menu>

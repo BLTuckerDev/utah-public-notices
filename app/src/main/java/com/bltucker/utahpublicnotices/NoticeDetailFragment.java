@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,10 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ShareActionProvider;
+import android.widget.Toast;
 
 import com.bltucker.utahpublicnotices.data.NoticeCursor;
 import com.bltucker.utahpublicnotices.data.PublicNoticeContract;
 import com.bltucker.utahpublicnotices.sync.UtahOpenGovApiProvider;
+import com.bltucker.utahpublicnotices.utils.NoticeDateFormatHelper;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public final class NoticeDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -58,8 +64,46 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
             case R.id.action_map:
                 showMeetingOnMap();
                 return true;
+            case R.id.action_calendar:
+                addCalendarAppointment();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    private void addCalendarAppointment(){
+
+        if(!cursorLoaded){
+            return;
+        }
+
+        try{
+            NoticeDateFormatHelper dateFormatHelper = new NoticeDateFormatHelper();
+
+            Date noticeDate = dateFormatHelper.getDbDateFormatter().parse(currentNoticeCusor.getDate());
+            Date noticeTime = dateFormatHelper.get24HourDateFormatter().parse(currentNoticeCusor.getTime());
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(noticeDate);
+            calendar.set(Calendar.HOUR, noticeTime.getHours());
+            calendar.set(Calendar.MINUTE, noticeTime.getMinutes());
+
+            Intent intent = new Intent(Intent.ACTION_INSERT)
+                    .setData(CalendarContract.Events.CONTENT_URI)
+                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, calendar.getTimeInMillis())
+                    .putExtra(CalendarContract.Events.TITLE, currentNoticeCusor.getTitle())
+                    .putExtra(CalendarContract.Events.DESCRIPTION,  currentNoticeCusor.getFullNotice())
+                    .putExtra(CalendarContract.Events.EVENT_LOCATION, currentNoticeCusor.getAddress())
+                    .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+
+            startActivity(intent);
+
+
+        } catch(Exception ex){
+            Toast.makeText(getActivity(), getActivity().getString(R.string.unable_add_to_calendar), Toast.LENGTH_SHORT).show();
+            Log.d(LOG_TAG, ex.toString());
         }
     }
 

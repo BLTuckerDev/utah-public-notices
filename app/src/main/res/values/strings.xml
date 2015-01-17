@@ -17,5 +17,7 @@
     <string name="please_enter_a_city_name">Please enter the name of a city.</string>
     <string name="action_share">Share</string>
     <string name="action_map">View Location</string>
+    <string name="add_calendar_event">Add Calendar Event</string>
+    <string name="unable_add_to_calendar">Unable to add calendar event at this time</string>
 
 </resources>

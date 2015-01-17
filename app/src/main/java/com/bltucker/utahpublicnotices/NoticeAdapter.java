@@ -9,6 +9,7 @@ import android.widget.CursorAdapter;
 
 import com.bltucker.utahpublicnotices.data.NoticeCursor;
 import com.bltucker.utahpublicnotices.data.PublicNoticeContract;
+import com.bltucker.utahpublicnotices.utils.NoticeDateFormatHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,11 +18,8 @@ import java.util.Date;
 
 public final class NoticeAdapter extends CursorAdapter {
 
-    private static final SimpleDateFormat dbDateFormatter = new SimpleDateFormat(PublicNoticeContract.DATE_FORMAT);
-    private static final SimpleDateFormat dayOfWeekFormatter = new SimpleDateFormat("EEEE");
-    private static final SimpleDateFormat fullDisplayDateFormatter = new SimpleDateFormat("MMMM dd yyyy");
-    private static final SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a");
-    private static final SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
+
+    private static final NoticeDateFormatHelper dateFormatHelper = new NoticeDateFormatHelper();
 
 
     public NoticeAdapter(Context context, Cursor cursor, int flags){
@@ -43,14 +41,15 @@ public final class NoticeAdapter extends CursorAdapter {
         NoticeCursor noticeCursor = new NoticeCursor(cursor);
 
         try {
-            Date meetingDate = dbDateFormatter.parse(noticeCursor.getDate());
+
+            Date meetingDate = dateFormatHelper.getDbDateFormatter().parse(noticeCursor.getDate());
 
             NoticeListItemViewHolder viewHolder = (NoticeListItemViewHolder) view.getTag();
 
-            viewHolder.dayTextView.setText(dayOfWeekFormatter.format(meetingDate));
-            Date date = _24HourSDF.parse(noticeCursor.getTime());
-            viewHolder.timeTextView.setText(_12HourSDF.format(date));
-            viewHolder.dateTextView.setText(fullDisplayDateFormatter.format(meetingDate));
+            viewHolder.dayTextView.setText(dateFormatHelper.getDayOfWeekFormatter().format(meetingDate));
+            Date date = dateFormatHelper.get24HourDateFormatter().parse(noticeCursor.getTime());
+            viewHolder.timeTextView.setText(dateFormatHelper.get12HourDateFormatter().format(date));
+            viewHolder.dateTextView.setText(dateFormatHelper.getFullDisplayDateFormatter().format(meetingDate));
             viewHolder.titleTextView.setText(noticeCursor.getTitle());
 
         } catch (ParseException e) {
