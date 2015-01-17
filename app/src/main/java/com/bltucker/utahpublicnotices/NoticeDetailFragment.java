@@ -46,6 +46,13 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     private ShareActionProvider shareActionProvider;
 
+    private MenuItem shareMenuItem;
+    private MenuItem mapMenuItem;
+    private MenuItem calendarMenuItem;
+    private MenuItem notificationMenuItem;
+
+    private boolean menuCreated = false;
+
     public NoticeDetailFragment() {
         this.setHasOptionsMenu(true);
     }
@@ -54,8 +61,45 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragment_details, menu);
-        shareActionProvider = (ShareActionProvider) menu.findItem(R.id.action_share).getActionProvider();
+
+        shareMenuItem = menu.findItem(R.id.action_share);
+        mapMenuItem = menu.findItem(R.id.action_map);
+        calendarMenuItem = menu.findItem(R.id.action_calendar);
+        notificationMenuItem = menu.findItem(R.id.action_notify);
+
+        shareActionProvider = (ShareActionProvider) shareMenuItem.getActionProvider();
         setupShareProvider();
+        menuCreated = true;
+
+        if(null == currentNoticeCursor){
+            disableMenuItems();
+        }
+    }
+
+
+    private void disableMenuItems(){
+
+        if(!menuCreated){
+            return;
+        }
+
+        shareMenuItem.setVisible(false);
+        mapMenuItem.setVisible(false);
+        calendarMenuItem.setVisible(false);
+        notificationMenuItem.setVisible(false);
+    }
+
+
+    private void enableMenuItems(){
+
+        if(!menuCreated){
+            return;
+        }
+
+        shareMenuItem.setVisible(true);
+        mapMenuItem.setVisible(true);
+        calendarMenuItem.setVisible(true);
+        notificationMenuItem.setVisible(true);
     }
 
 
@@ -79,11 +123,6 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
 
     private void createNoticeNotification(){
-//TODO toasts !!!
-        if(null == currentNoticeCursor){
-            return;
-        }
-
 
         Intent alarmIntent = new Intent(getActivity(), NotificationAlarmReceiver.class);
         alarmIntent.putExtra(NotificationAlarmReceiver.NOTIFICATION_NOTICE_ID_EXTRA, currentNoticeCursor.getId());
@@ -96,6 +135,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
             PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, 0);
 
             alarmManager.set(AlarmManager.RTC, noticeCalendar.getTimeInMillis(), pendingAlarmIntent);
+            Toast.makeText(getActivity(), getActivity().getString(R.string.notification_set), Toast.LENGTH_SHORT).show();
 
         } catch(Exception ex){
             Log.d(LOG_TAG, ex.toString());
@@ -105,9 +145,6 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
     private void addCalendarAppointment(){
 
-        if(null == currentNoticeCursor){
-            return;
-        }
 //TODO convert to object in charge of making appointments
         try{
             Calendar noticeCalendar = currentNoticeCursor.getCalendarDateTime();
@@ -131,10 +168,6 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
 
     private void showMeetingOnMap() {
-
-        if(null == currentNoticeCursor){
-            return;
-        }
 
         Intent mapIntent = new Intent();
         mapIntent.setAction(Intent.ACTION_VIEW);
@@ -200,6 +233,7 @@ public final class NoticeDetailFragment extends Fragment implements LoaderManage
 
         if(data.moveToFirst()){
             currentNoticeCursor = new NoticeCursor(data);
+            enableMenuItems();
             Log.d(LOG_TAG, "Detail fragment noticeId: " + currentNoticeCursor.getId());
             webView.loadUrl(currentNoticeCursor.getFullNotice());
             setupShareProvider();

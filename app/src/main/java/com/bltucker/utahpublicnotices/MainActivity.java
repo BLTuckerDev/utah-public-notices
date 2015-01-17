@@ -11,7 +11,7 @@ import com.bltucker.utahpublicnotices.sync.PublicNoticeSyncAdapter;
 import com.bltucker.utahpublicnotices.utils.PreferenceFetcher;
 
 
-//TODO add ability to notify 1 hour before meeting
+//TODO calendar event responsbility in separate object
 //TODO app icon
 
 public final class MainActivity extends Activity

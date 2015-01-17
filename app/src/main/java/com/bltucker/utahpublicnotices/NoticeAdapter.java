@@ -18,7 +18,6 @@ import java.util.Date;
 
 public final class NoticeAdapter extends CursorAdapter {
 
-
     private static final NoticeDateFormatHelper dateFormatHelper = new NoticeDateFormatHelper();
 
 

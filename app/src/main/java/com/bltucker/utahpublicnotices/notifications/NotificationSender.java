@@ -7,11 +7,15 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.bltucker.utahpublicnotices.DetailsActivity;
 import com.bltucker.utahpublicnotices.MainActivity;
 import com.bltucker.utahpublicnotices.R;
 import com.bltucker.utahpublicnotices.data.NoticeCursor;
+import com.bltucker.utahpublicnotices.utils.NoticeDateFormatHelper;
+
+import java.util.Date;
 
 final class NotificationSender {
 
@@ -32,7 +36,8 @@ final class NotificationSender {
         Notification.Builder builder = new Notification.Builder(context);
 
         builder.setSmallIcon(R.drawable.ic_launcher);
-        String formattedNotificationTitle = String.format("%s - %s", noticeCursor.getTime(), noticeCursor.getTitle());
+
+        String formattedNotificationTitle = String.format("%s - %s", this.getFormattedNoticeTime(noticeCursor), noticeCursor.getTitle());
         builder.setContentTitle(formattedNotificationTitle);
         builder.setContentText(noticeCursor.getAddress());
 
@@ -50,5 +55,19 @@ final class NotificationSender {
 
         Long id = noticeCursor.getId();
         notificationManager.notify(id.hashCode(), builder.build());
+    }
+
+
+    private String getFormattedNoticeTime(NoticeCursor noticeCursor){
+
+        final NoticeDateFormatHelper dateFormatHelper = new NoticeDateFormatHelper();
+
+        try{
+            Date date = dateFormatHelper.get24HourDateFormatter().parse(noticeCursor.getTime());
+            return dateFormatHelper.get12HourDateFormatter().format(date);
+        } catch(Exception ex){
+            Log.d(LOG_TAG, ex.toString());
+            return "";
+        }
     }
 }

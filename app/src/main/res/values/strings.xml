@@ -19,5 +19,6 @@
     <string name="action_map">View Location</string>
     <string name="add_calendar_event">Add Calendar Event</string>
     <string name="unable_add_to_calendar">Unable to add calendar event at this time</string>
+    <string name="notification_set">Notification Set!</string>
 
 </resources>
