@@ -1,0 +1,11 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="@string/city_setting_pref_key"
+        android:title="@string/city_setting_pref_title"
+        android:defaultValue="@string/city_setting_pref_default"
+        android:inputType="textCapWords"
+        android:capitalize="words"
+        android:singleLine="true"
+        android:maxLines="1" />
+</PreferenceScreen>

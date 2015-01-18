@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_share"
+          android:title="@string/action_share"
+          android:actionProviderClass="android.widget.ShareActionProvider"
+          android:showAsAction="never"/>
+
+    <item android:id="@+id/action_map"
+          android:title="@string/action_map"
+          android:showAsAction="always"
+          android:icon="@drawable/ic_action_maps_pin_drop"/>
+
+    <item android:id="@+id/action_calendar"
+          android:title="@string/add_calendar_event"
+          android:showAsAction="always"
+          android:icon="@drawable/perm_group_calendar"/>
+
+    <item android:id="@+id/action_notify"
+          android:title="Notify Me"
+          android:showAsAction="never"/>
+
+
+</menu>
