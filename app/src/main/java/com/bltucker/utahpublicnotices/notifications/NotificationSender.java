@@ -35,7 +35,7 @@ final class NotificationSender {
 
         Notification.Builder builder = new Notification.Builder(context);
 
-        builder.setSmallIcon(R.drawable.ic_launcher);
+        builder.setSmallIcon(R.drawable.ic_notification_icon);
 
         String formattedNotificationTitle = String.format("%s - %s", this.getFormattedNoticeTime(noticeCursor), noticeCursor.getTitle());
         builder.setContentTitle(formattedNotificationTitle);
