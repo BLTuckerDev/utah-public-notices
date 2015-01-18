@@ -8,12 +8,9 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 
 import com.bltucker.utahpublicnotices.data.NoticeCursor;
-import com.bltucker.utahpublicnotices.data.PublicNoticeContract;
 import com.bltucker.utahpublicnotices.utils.NoticeDateFormatHelper;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public final class NoticeAdapter extends CursorAdapter {

@@ -11,7 +11,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,10 +25,8 @@ import android.widget.Toast;
 import com.bltucker.utahpublicnotices.data.NoticeCursor;
 import com.bltucker.utahpublicnotices.data.PublicNoticeContract;
 import com.bltucker.utahpublicnotices.notifications.NotificationAlarmReceiver;
-import com.bltucker.utahpublicnotices.utils.NoticeDateFormatHelper;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public final class NoticeDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 

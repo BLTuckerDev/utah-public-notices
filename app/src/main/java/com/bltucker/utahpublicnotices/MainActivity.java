@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.bltucker.utahpublicnotices.sync.PublicNoticeSyncAdapter;
 import com.bltucker.utahpublicnotices.utils.PreferenceFetcher;
