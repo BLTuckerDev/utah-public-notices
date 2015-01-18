@@ -48,7 +48,7 @@ public final class UtahOpenGovApiProvider {
             urlConnection.connect();
 
             InputStream inStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if(null == inStream){
                 return contentValues;
             }

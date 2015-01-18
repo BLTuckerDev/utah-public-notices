@@ -47,13 +47,6 @@ public final class InitialSetup extends Fragment implements View.OnClickListener
     }
 
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onInitialSetupCompleted();
-        }
-    }
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

@@ -27,8 +27,8 @@ final class NotificationSenderAsyncTask extends AsyncTask<Void,Void, Void> {
                 null,
                 null);
 
-        NotificationSender notificationSender = new NotificationSender(context);
         if(cursor.moveToFirst()){
+            NotificationSender notificationSender = new NotificationSender(context);
             notificationSender.sendNotification(cursor);
         }
 
