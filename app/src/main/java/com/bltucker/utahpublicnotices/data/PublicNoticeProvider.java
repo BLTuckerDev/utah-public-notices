@@ -286,6 +286,7 @@ public final class PublicNoticeProvider extends ContentProvider{
         switch(match){
             case NOTICE_URI_CODE:
                 insertCount = this.bulkInsertNotices(values);
+                break;
 
             default:
                 insertCount = super.bulkInsert(uri, values);
