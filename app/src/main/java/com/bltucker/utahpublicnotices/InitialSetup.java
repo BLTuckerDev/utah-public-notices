@@ -1,11 +1,10 @@
 package com.bltucker.utahpublicnotices;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +20,10 @@ public final class InitialSetup extends Fragment implements View.OnClickListener
     private InitialSetupFragmentListener mListener;
 
     private EditText cityNameEditText;
-    private Button okButton;
+
 
     public static InitialSetup newInstance() {
-        InitialSetup fragment = new InitialSetup();
-        return fragment;
+        return new InitialSetup();
     }
 
 
@@ -41,7 +39,7 @@ public final class InitialSetup extends Fragment implements View.OnClickListener
         View rootView = inflater.inflate(R.layout.fragment_initial_setup, container, false);
 
         cityNameEditText = (EditText) rootView.findViewById(R.id.initial_setup_edit_text);
-        okButton = (Button) rootView.findViewById(R.id.initial_setup_ok_button);
+        Button okButton = (Button) rootView.findViewById(R.id.initial_setup_ok_button);
 
         okButton.setOnClickListener(this);
 
