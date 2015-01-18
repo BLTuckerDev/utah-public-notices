@@ -70,7 +70,7 @@ public final class MainActivity extends Activity
 
     @Override
     public void onInitialSetupCompleted() {
-        PublicNoticeSyncAdapter.syncImmediately(this);
+        PublicNoticeSyncAdapter.initializeSyncAdapter(this);
         getFragmentManager().beginTransaction().replace(R.id.fragment_master_container, new NoticeListFragment()).commit();
     }
 }

@@ -1,6 +1,7 @@
 package com.bltucker.utahpublicnotices;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -80,6 +82,8 @@ public final class InitialSetup extends Fragment implements View.OnClickListener
         editor.putString(getActivity().getString(R.string.city_setting_pref_key),cityName);
         editor.apply();
 
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(cityNameEditText.getWindowToken(), 0);
         this.mListener.onInitialSetupCompleted();
     }
 
