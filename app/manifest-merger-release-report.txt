@@ -1,6 +1,8 @@
 -- Merging decision tree log ---
 manifest
 ADDED from AndroidManifest.xml:2:1
+	xmlns:android
+		ADDED from AndroidManifest.xml:2:11
 	package
 		ADDED from AndroidManifest.xml:3:5
 		INJECTED from AndroidManifest.xml:0:0
@@ -8,8 +10,6 @@ ADDED from AndroidManifest.xml:2:1
 	android:versionName
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
-	xmlns:android
-		ADDED from AndroidManifest.xml:2:11
 	android:versionCode
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
@@ -69,12 +69,12 @@ ADDED from AndroidManifest.xml:29:17
 		ADDED from AndroidManifest.xml:29:27
 provider#com.bltucker.utahpublicnotices.data.PublicNoticeProvider
 ADDED from AndroidManifest.xml:33:9
-	android:authorities
-		ADDED from AndroidManifest.xml:35:13
 	android:syncable
 		ADDED from AndroidManifest.xml:37:13
 	android:exported
 		ADDED from AndroidManifest.xml:36:13
+	android:authorities
+		ADDED from AndroidManifest.xml:35:13
 	android:name
 		ADDED from AndroidManifest.xml:34:13
 service#com.bltucker.utahpublicnotices.sync.PublicNoticeAuthenticatorService
@@ -121,10 +121,10 @@ ADDED from AndroidManifest.xml:60:9
 		ADDED from AndroidManifest.xml:61:13
 meta-data#android.support.PARENT_ACTIVITY
 ADDED from AndroidManifest.xml:64:13
-	android:value
-		ADDED from AndroidManifest.xml:66:17
 	android:name
 		ADDED from AndroidManifest.xml:65:17
+	android:value
+		ADDED from AndroidManifest.xml:66:17
 activity#com.bltucker.utahpublicnotices.SettingsActivity
 ADDED from AndroidManifest.xml:68:9
 	android:label
@@ -133,10 +133,10 @@ ADDED from AndroidManifest.xml:68:9
 		ADDED from AndroidManifest.xml:69:13
 receiver#com.bltucker.utahpublicnotices.notifications.NotificationAlarmReceiver
 ADDED from AndroidManifest.xml:73:9
-	android:enabled
-		ADDED from AndroidManifest.xml:75:13
 	android:exported
 		ADDED from AndroidManifest.xml:76:13
+	android:enabled
+		ADDED from AndroidManifest.xml:75:13
 	android:name
 		ADDED from AndroidManifest.xml:74:13
 uses-sdk
