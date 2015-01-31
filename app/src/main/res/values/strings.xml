@@ -20,5 +20,6 @@
     <string name="add_calendar_event">Add Calendar Event</string>
     <string name="unable_add_to_calendar">Unable to add calendar event at this time</string>
     <string name="notification_set">Notification Set!</string>
+    <string name="empty_notice_list">We couldn\'t find any notices for your city! Please check your city name in the settings menu.</string>
 
 </resources>
