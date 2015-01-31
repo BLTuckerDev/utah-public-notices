@@ -117,6 +117,9 @@ public final class NoticeListFragment extends Fragment implements LoaderManager.
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main_list, container, false);
         listView = (ListView) rootView.findViewById(R.id.fragment_notice_list_list_view);
+        View emptyListView = inflater.inflate(R.layout.notice_list_empty_item, null, false);
+        container.addView(emptyListView);
+        listView.setEmptyView(emptyListView);
         attachAdapter();
         setupOnClickListener();
 

@@ -68,7 +68,7 @@ public final class InitialSetup extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        String cityName = cityNameEditText.getText().toString();
+        String cityName = cityNameEditText.getText().toString().trim();
         if(cityName.isEmpty()){
             Toast.makeText(getActivity(),getActivity().getString(R.string.please_enter_a_city_name), Toast.LENGTH_SHORT).show();
             return;
